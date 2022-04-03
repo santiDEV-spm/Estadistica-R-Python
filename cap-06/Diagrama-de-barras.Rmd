@@ -1,0 +1,58 @@
+---
+title: "Diagrama de Barras"
+author: "Santiago Pérez Moncada"
+date: "12/6/2020"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+El tipo de gráfico más usado para representar varibles cualitativas son los **diagramas de barras**(bar plots).Como su nombre indica, un diagrama de barras contiene, cada nivel de la variable cualitativa, una barra de altura su frecuencia.
+
+La manera más sencilla de dibujar un diagrama de barras de las frecuencias absolutas o relativas de una variable cualitativa es usando la instrucción `barplot()` aplicada a la tabla correspondiente.
+
+**Atención** Como pasaba con `prop.table()`, el argumento de bar plot ha de ser una tabla, y por consiguiente, se ha de aplicar al resultado de `table()` o de `prop.table()`, nunca al vector de datos original. 
+
+```{r}
+Sexo = factor(sample(c('Hombre','Mujer'), size = 12, replace = TRUE))
+Respuestas = factor(sample(c("Si","No"), size = 12, replace = TRUE))
+
+summary(Sexo)
+barplot(table(Sexo), col = c("lightblue","pink"), 
+main = "Diagrama de barras de las frecuencias absolutas del Sexo")
+
+summary(Respuestas)
+barplot(prop.table(table(Respuestas)), col = c("darkgreen","firebrick"),
+main = "Diagrama de barras de frecuencias relativas de Respuestas")
+```
+
+Podemos crear un conjunto de graficos escribiendo la funcion `par()` con el argumento `mfrow = c(rows,colums) ` igualandolo a un vector que contiene el nuemero de filas y columnas para colocar los graficos
+
+```{r}
+par(mfrow = c(1,2))
+barplot(table(Respuestas), col = c("green"))
+barplot(table(Respuestas), col = c("red","blue"))
+```
+
+## Diagrama de barras en forma horizontal.
+
+```{r}
+barplot(table(Sexo), horiz = TRUE)
+```
+
+## Diagrama de barras -Tabla bidimensional
+
+Queda dividido el grafico en dos columnas cada una representa un nivel de la variable `Respuesta` es decir `Si` o `No`, El area de cada una de las columnas queda dividida por los niveles de la variable `Sexo`, `Hombre` o `Mujer`.
+
+```{r}
+barplot(table(Sexo,Respuestas), legend.text = TRUE)
+barplot(table(Sexo,Respuestas), beside = TRUE ,legend.text = TRUE)
+```
+
+```{r}
+barplot(table(Respuestas,Sexo), beside = TRUE, names=c("Men","Women"),
+        col = c("yellow","lightblue"), legend.text = c("No","Yes"))
+```
+

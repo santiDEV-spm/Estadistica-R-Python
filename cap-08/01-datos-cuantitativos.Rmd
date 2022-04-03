@@ -1,0 +1,27 @@
+---
+title: "Datos Cuantitativos"
+author: "Santiago Pérez Moncada"
+date: "20/6/2020"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Los **datos cuantitativos** sin los que expresan cantidades que se representan mediante números.Éstos se suelen clasificar en continuos y discretos.
+
+*   Los **datos continuos** son los que, si existe la posibilidad de medirlos con precisión     infinita, en principio podrian tomar todos los valores de un intervalo de la recta         real.A modo de ejemplo, el peso, la altura, el tiempo... son datos de este tipo.
+
+*   Por su parte, los **datos discretos** son los que pueden tomar un solo conjunto            contable de valores.El número de colores de un gato, el número de individuos que           conforman una población son algunos ejemplos de este tipo de datos.
+
+Conviene tener en cuenta que esta división es solo teórica.Es decir, en la práctica, 
+todos estos datos son discretos puesto que la precisión infinita no existe.Sin embargo, es necesario de vez en cuando suponer los datos de tipo continuo para asi poder utilizar técnicas específicas en su analisis.
+
+A la hora de estudiar **variables cuantitativas**, podemos utilizar las frecuencias que hemos visto hasta el momento: absoluta, relativa, acumulada y relativa acumulada. Esto se debe a que podemos ordenar los datos cuantitativos en el orden natural de los número reales.
+
+En este caso, disponemos de muchas otra tecnicas descriptivas aparte de las frecuencias, puesto que estamos trabajando con números reales y podemos operar con ellos.
+
+Los datos cuantitativos admiten dos tipos de tratamiento según trabajemos con los **raw data**(datos brutos u originales) o bien los agrupemos en clases o intervalos.
+
+En esta lección trabajaremos sobre la primera situación.En la siguiente, estudiaremos la descripcón de datos cuantitativos agrupados.

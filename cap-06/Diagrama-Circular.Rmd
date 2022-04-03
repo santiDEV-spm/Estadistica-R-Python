@@ -1,0 +1,28 @@
+---
+title: "Diagrama Circular"
+author: "Santiago Pérez Moncada"
+date: "12/6/2020"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Un tipo muy popular de representacion gráfica de variables cualitativas son los **diagramas circulares**.En un diagrama circular(`pie chart`)se representan los niiveles de una variable cualitativa como sectores circulares de un circulo, de manera que el ángulo(o equivalente, el área) de cada sector sea proporcional, a la frecuancia del nivel que corresponde.
+
+Con R, este tipo de diagramas se pueden producir con la instrucción `pie` de nuevo aplicada a la tabla de frecuencias y no al vector original.
+
+La función `pie` admite muchos parametros para modificar el resultado: se pueden cambiar los colores con `col`, se pueden cambiar los nombre de los niveles con `names`, se puede poner un tipulo con `main`, etc; puedes consultar la lista completa de parámetros con `help(pie)`.
+
+```{r}
+fichas = factor(sample(1:5, size = 20, replace = TRUE)) 
+pie(table(fichas), main = "Diagrama circular de la variable fichas")
+```
+
+
+```{r}
+Respuestas = factor(sample(c("Si","No"), size = 12, replace = TRUE))
+pie(table(Respuestas), main = "Diagrama circular de la varible respuestas")
+```
+

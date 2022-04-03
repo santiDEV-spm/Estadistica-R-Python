@@ -1,0 +1,82 @@
+---
+title: "Datos-Cualitativos"
+author: "Santiago Pérez Moncada"
+date: "3/6/2020"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Datos Cualitativos
+
+Corresponden a las observaciones sobre las cualidades de un objeto o individuo. Suelen codificarse pero tambien se pueden usar numeros que jueguen el papel de etiquetas.
+
+## ¿Qué son los datos cualitativos?
+
+Los datos cualitaivod que pueden ser iguales o diferente, pero que no admiten ningún otro tipo de comparacion significativa.
+
+Es decir que no tenga ningún sentido preguntarse si uno es mas grande que otro, ni efectuar operaciones aritmeticas con ellos, aunque esten representados por numeros.
+
+Por lo tanto un mismo conjunto de datos puede ser cualitativo o de otro tipo según el ánalisis que vayamos a hacer.
+
+## Estudio de Frecuencias
+  
+  * **Freciencia Absoluta:** Contar el numero de evidencias de cada uno de los niveles                              o categoria.
+  
+  * **Frecuencia Relativa:** Porcentaje del total representa cada nivel o categoria.
+  
+### Ejemplo
+
+* Supongamos que tenemos un tipo de datos cualitativos con niveles
+$$l_{1},l_{2}...l_{k}$$
+
+* Efectuamos $n$ observaciones de este tipo de datos y denotamos por
+$$x_{1},x_{2}...x_{n}$$
+
+* los resultados que obtenemos con
+$$x_{j} \in \{l_{1},l_{2}...l_{k}\}$$
+
+* Estas observaciones forman una variable cualitativa
+
+Con estas notacione:
+
+**Frecuencia absoluta** $= n_{j}$ , del nivel $l_{j}$ en esta variable cualitativa es el numero de observaciones que $x_{i}$ toma el valor $l_{j}$ 
+
+**Frecuencia relativa** del nivel $l_{j}$ en esta variable cualitativa es la fraccion.
+$$f_{j} = \frac{n_{j}}{n}$$
+
+Es decir la frecuencia relativa del nivel $l_{j}$ es la fracción(en tanto por uno) de observaciones que corresponden a este nivel.
+
+La **Moda** de esta variable cualitativa es su nivel, o niveles de mayor frecuencia absoluta o relativa.
+
+## Ejemplo
+
+Supongamos que se ha realaizado un seguimiento a 20 personas asistentes a un congreso. Uno delos datos que se ha recogido sobre estas personas ha sido su sexo.Elresultado ha sido una variable cualitativa formada por las 20 observaciones siguientes.
+
+*Mujer, Mujer, Hombre, Mujer, Mujer, Mujer, Mujer, Mujer, Hombre, Mujer, Hombre,
+ Hombre, Mujer, Mujer, Hombre, Mujer, Mujer, Mujer, Mujer, Hombre*
+
+Sus niveles de la Varible Cualitativa Sexo son **Hombre** y **Mujer**
+Las frecuencias absolutas $n_{j}$ de las valibles son:
+$$n_{hombres} = 6 $$
+$$n_{mujeres} = 14$$
+
+Puesto que hay *20 individuos*, sus *frecuencias relativas* son
+$$Hombre = \frac{6}{20} = 0.3$$
+$$Mujer = \frac{14}{20} = 0.7$$
+
+En este caso $l_{1} = Hombre$ y $l_{2} = Mujer$, $n = 20$(Numero de observaciones efectuadas), y $x_{1},x_{2}...x_{n}$ formarian la muestra de los sexos
+
+La tabla siguiente resume las frecuencias absolutas y relativas de la variable cualitativa del ejemplo anterior, con las notaciones que acabamos de introducir.
+
+|Sexo  |$n_{i}$|$f_{i}$|$\%$|
+|------|-------|-------|----|
+|Hombre|    6  |  0.3  | 30%|
+|Mujer |   14  |  0.7  | 70%|
+|Total |   20  |   1   |100%|
+
+

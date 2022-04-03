@@ -1,0 +1,48 @@
+---
+title: "Iris"
+author: "Santiago Pérez Moncada"
+date: "22/5/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Data frame de Iris
+```{r}
+df = iris
+head(df, 5)
+tail(df,5)
+str(df)
+
+
+names(df) #nombre de columnas names= colnames()
+rownames(df) #nombres de filas
+dimnames(df) #nombre de columnas y filas
+nrow(df) # numero filas
+ncol(df) #numero de columnas
+dim(df) #numero de filas y columnas
+
+df$Petal.Length[1:10]
+df$Species[1:10]
+
+```
+
+# Acceso al DF
+```{r}
+df[1:10,]
+df[1:10, 2:4]
+df[df$Species == 'setosa' & df$Sepal.Width > 4,]
+df[df$Species == 'setosa' & df$Sepal.Width > 4,][c(1,3), c(2,5)]
+```
+
+```{r}
+dataOrange = Orange
+dataOrange[c(10:12),]
+dataOrange[c(2,17), c(1,3)]
+dataOrange[2,3]
+
+dataOrange[dataOrange$circumference <= 50, ]
+```
+

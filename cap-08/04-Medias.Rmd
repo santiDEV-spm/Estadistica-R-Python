@@ -1,0 +1,69 @@
+---
+title: "Medias"
+author: "Santiago Pérez Moncada"
+date: "23/6/2020"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Medias
+
+```{r}
+x = c(32, 45, 67, 43, 28, 17, 48, 95)
+n = length(x)
+```
+
+## Media Aritmética
+
+$$\bar{x} = \frac{1}{n}\sum_{i=1}^n x_{i}$$
+```{r}
+sum(x)/n # mean
+mean(x)
+```
+
+## Media Aritmética Ponderada
+
+A veces puede ser útil otorgar pesos o valores a los datos dependiendo de su relevancia para determinado estudio. En esos casos se puede utilizar una media ponderada $X_{1},X_{2}..X_{n}$ es el conjunto de datos y $w_{1},w_{2}...w_{n}$ son numeros positivos llamados pesos o factores de ponderación.
+
+$$
+\bar{X}_w =\frac{X_{1}\cdot w_{1} + X_{2}\cdot w_{2}+...+X_{n}\cdot w_{n}}{w_{1}+w_{2}+...+w_{n}} =\frac{\sum_{i=1}^n X_{i}\cdot w_{n}}{\sum_{i=1}^n w_{i}}
+$$
+
+```{r}
+w = c(1, 2, 2, 2, 3, 3, 4, 1)
+sum(w*x)/sum(w)
+```
+
+## Media Geométrica
+
+La media geométrica es un promedio muy util en conjuntos de números que son interpretados en orden de su productom no de su suma(tal y como ocurre en la media aritmética).Por ejemplo en velocidades de crecimiento.
+
+$$
+\bar{x}_G = \left(\prod_{i=1}^n x_{i}\right)^{\frac{1}{n}}
+$$
+
+```{r}
+prod(x)^(1/n)
+prod(x^(1/n))
+```
+
+## Media Armonica
+
+La media armónica es un promedio muy útil en conjuntos de números que se definen en relación con alguna unidad, por ejemplo la velocidad (distancia por unidad de tiempo).
+
+$$\bar{x}_A = n \cdot \left(\sum_{i=1}^n \frac{1}{x_{i}}\right)^{-1} = \frac{n}{\sum_{i=1}^n \frac{1}{x_{i}}}$$
+
+```{r}
+n/sum(1/x)
+```
+
+
+
+
+
+
+
+

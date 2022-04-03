@@ -1,0 +1,38 @@
+---
+title: "Analisis de Pokemon"
+author: "Santiago Pérez Moncada"
+date: "10/10/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE,cache = TRUE)
+library(reticulate)
+use_python("/anaconda3/bin/python")
+```
+
+# Pokemon
+
+## Limpieza de los datos en Python
+
+```{python}
+import pandas as pd
+pokemon = pd.read_csv("../data/Pokemon.csv")
+print(pokemon.head())
+print(pokemon.shape)
+
+pokemon = pokemon[pokemon['Generation'] == 1]
+pokemon = pokemon[["Type 1","Type 2","Speed"]]
+print(pokemon.shape)
+
+pokemon = pokemon.dropna()
+print(pokemon.shape)
+```
+
+
+## Transmisión de los datos de Python a R
+
+```{r, fig.width=7,fig.height=4}
+
+```
+

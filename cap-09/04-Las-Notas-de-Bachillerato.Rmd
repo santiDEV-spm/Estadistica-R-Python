@@ -1,0 +1,105 @@
+---
+title: "Las Notas de Bachillerato"
+author: "Santiago Pérez Moncada"
+date: "13/7/2020"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Se han recogido las nostas de un examen de historia a los alumnos de primero de bachillerato de un instituto.
+
+Vamos a hacer uso de todo lo aprendido para obtener la mayoria de información posible utilizando las funciones `cut` e `hist` y tambien, las proporcionalidades para nosotros.
+
+```{r}
+notas = sample(0:10,100,replace = TRUE)
+notas
+```
+
+
+## Solución
+
+Vamos a agrupar las notas en los siguientes intervalos:
+
+$$[0,5),\;\;[5,7),\;\;[7,9),\;\;[9,10]$$
+Claramente, estos 4 intervalos no tienen la misma amplitud.Fijémosnos también en que el último intervalo está cerrado por la derecha.
+
+```{r}
+#Definimos el vector de extremos
+L = c(0,5,7,9,10)
+#definimos notas1 como el resultado de la codificación en intervalos utilizando como 
+#etiquetas los propios intervalos.
+notas1 = cut(notas,breaks = L, right = FALSE, include.lowest = TRUE)
+notas1
+```
+
+```{r}
+#Definimos las marcas de clase
+MC = (L[1:(length(L)-1)]+L[2:length(L)])/2
+#Definamos notas2 como el resultado de la codificacion en intervalos utilizando como etiquetas
+# las marcas de clase.
+notas2 = cut(notas, breaks = L, labels = MC, right = FALSE, include.lowest = TRUE)
+notas2
+```
+
+```{r}
+#Definimos notas3 como el resultado de la codificación en los intervalos utilizando como
+#etiquetas la posición ordenada del intervalo (1,2,3,4)
+notas3 = cut(notas,breaks = L,labels = FALSE,right = FALSE, include.lowest = TRUE)
+notas3
+```
+
+
+```{r}
+#Definimos notas4 como el resultado de la codificación en intervalos como
+#etiquetas Susp,Aprob,Not,Exc
+notas4 = cut(notas,breaks = L,labels = c("Susp","Aprob","Not","Exc"), right = FALSE,
+             include.lowest = TRUE)
+notas4
+```
+
+El resultado de `cut` ha sido, en cada caso una lista con los elementos del vector original codificados con las etiquetas de las clases a las que pertenecen.
+
+Las dos primeras aplicaciones de la función `cut` han producido factores(cuyos niveles son los intervalos y las marcas de clase, respectivamente, en ambos casos ordenados de manera natural), mientras que aplicándole `labels = FALSE` hemos obtenido un vector.
+
+¿Qué habría ocurrido si le hubiéramos pedido a `R` que cortara los datos en 4 intervalos?
+
+Pues en este caso no nos hubiera servido de mucho, sobre todo porque la amplitud de nuestros intervalos era, desde buen inicio, diferente.
+
+```{r}
+cut(notas, breaks = 4, right = FALSE, include.lowest = TRUE)
+```
+
+`R` ha repartido los datos en 4 intervalos de longitud 2.5, y ha desplazado ligeramente a la izquierda el extremos izquierdo del primer intervalo.
+
+**Trabajaremos** ahora con `notas4` y calculemos sus frecuencias:
+
+```{r}
+table(notas4) #Frec.Absolutas
+prop.table(table(notas4))#Frec.Relativas
+cumsum(table(notas4))# Fr.Abs.Acum
+cumsum(prop.table(table(notas4))) #Fr.Rel.Cum
+```
+
+Podríamos haber obtenido todo lo anterior haciendo uso de la función `hist`.
+
+```{r}
+notasHist = hist(notas, breaks = L, right = FALSE, include.lowest = TRUE, plot = FALSE)
+FAbs = notasHist$count
+Frel = prop.table(FAbs)
+FAbsCum = cumsum(FAbs)
+FRelCum = cumsum(Frel)
+```
+
+Ahora ya podemos crear un data frame con todas estas frecuencias:
+
+```{r}
+intervalos = c("[0,5)","[5,7)","[7,9)","[9,10]")
+calificacion = c("Suspenso","Aprobado","Notable","Excelente")
+marcas = notasHist$mids
+tabla.Fr = data.frame(intervalos,calificacion,marcas,FAbs,FAbsCum,Frel,FRelCum)
+tabla.Fr
+```
+

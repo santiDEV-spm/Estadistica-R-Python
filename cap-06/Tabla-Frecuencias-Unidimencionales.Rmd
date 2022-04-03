@@ -1,0 +1,144 @@
+---
+title: "Tabla de Frecuencias Unidimensionales"
+author: "Santiago Pérez Moncada"
+date: "3/6/2020"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Supongamos que tenemos una variable cualitativa guardada en un vector o un facor como la siguiente:
+
+```{r}
+x = sample(1:5, size= 12, replace = TRUE)
+x
+```
+```{r}
+Respuestas =factor(sample(c('Si','No'), size = 12, replace = TRUE))
+Respuestas
+```
+
+## Tabla de Contingencia
+
+En R, la **tabla de frecuencias absoulutas** de un vector que representa una variable cualitativa se calcula con la funcion `table()`.
+
+La primera fila de la tabla tine los niveles de la variable y la segunda fila contiene la frecuencia absoluta de cada nivel respectivamente.
+
+```{r}
+table(x)
+```
+```{r}
+table(Respuestas)
+```
+
+Obtenemos los nombre de los niveles de la variable de la siguiente forma
+
+```{r}
+names(table(x))
+names(table(Respuestas))
+```
+
+```{r}
+z = factor(x, levels = 1:7) #Los niveles seran 1,2,3,4,5,6,7
+z
+```
+```{r}
+table(z)
+```
+
+Podemos pensar que la tabla unidimensional es como un vector de numeros donde cada entrada esta identificada por un nombre:El de su columna. podemos usar tanto su posicion como su nombre.
+
+```{r}
+table(x)[3] # la tercer columna de table(x)
+```
+```{r}
+table(Respuestas)['Si'] # la columna de si
+```
+
+Las tablas de contingencia aceptan la mayoria de las funciones que ya hemos utilizado para vectores.
+
+```{r}
+sum(table(x))
+```
+```{r}
+sqrt(table(Respuestas))
+```
+
+# Ejemplo de Tablas de Contingencia
+```{r}
+datos = factor(c('H','M','M','M','H','H','M','M'))
+table(datos)
+
+table(datos)["M"]
+sum(table(datos))
+```
+
+# Frecuencias relativas
+$$f_i = \frac{n_i}{n}$$
+```{r}
+100*prop.table(table(datos))
+table(datos)/length(datos) * 100
+names(which(table(datos) == 3))
+
+moda <- function(d){
+  names(which(table(d)== max(table(d))))
+}
+
+m_t = moda(datos) # Moda
+```
+La moda del dataFrame es: `r m_t`.
+
+La tabla de **Frecuencias relativas** deun vector se puede calcular aplicando la funcion `prop.table()` a su `table`. El resultado vuelve a ser una tabla de **contingencia unidimencional**.
+
+```{r}
+prop.table(table(x))
+prop.table(table(Respuestas))
+```
+
+Tambien podemos calcular la tabla de frecuencias relativas de un vector dividiendo el resultado de table por el numero de observaciones.
+
+```{r}
+table(x)/length(x)
+```
+
+Dados un vector $\vec{x}$ y un $n \in \mathbb{N}$, la instrución
+**names(which(table(x)==n))** nos da los niveles que tienen frecuencia absoluta $n$ en $\vec{x}$
+
+```{r}
+table(x)
+names(which(table(x)==1))
+```
+
+podemos obtener la **Moda** de la siguiente manera
+```{r}
+names(which(table(x) ==  max(table(x))))
+names(which(table(Respuestas) == max(table(Respuestas))))
+```
+
+# Ejercicio
+```{r}
+datos = c(rep("H",6),rep("M",14))
+```
+
+# Tabla de Frecuencias Absolutas
+```{r}
+table(datos)
+```
+
+# Tabla de Frecuencias Relativas
+```{r}
+prop.table(table(datos)) ## Forma una de hacerlo
+table(datos)/length(datos) ## forma dos de hacerlo
+```
+
+# Moda
+```{r}
+names(which(table(datos) == max(table(datos))))
+
+table(datos)[table(datos) == max(table(datos))]
+```
+

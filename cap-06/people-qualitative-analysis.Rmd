@@ -1,0 +1,30 @@
+---
+title: "People HairEyeColor"
+author: "Santiago Pérez Moncada"
+date: "10/6/2020"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Ejemplo de color de ojos y de Cabello
+
+Ha este formato de datos se le llama datos agregados puesto que no presenta información informacion individual de cada individuo.Podemos observar que el conjunto de datos `HairEyeColor` nos presenta la **frecuencia absoluta** y que este conjunto es de tres dimensiones `sex,hair,eye`.
+```{r}
+HairEyeColor
+
+total <- sum(HairEyeColor)
+```
+El total de los individuos de la tabla de datos es `r total`
+```{r}
+prop.table(HairEyeColor, margin = 3) #Frec.Relativa.Marginal por sexo
+prop.table(HairEyeColor, margin = c(1,2))#Frec.Relativa.Marginal Cabello y ojos
+```
+
+```{r}
+aperm(HairEyeColor, perm = c("Sex","Hair","Eye"))
+```
+
+

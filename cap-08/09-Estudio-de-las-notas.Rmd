@@ -1,0 +1,67 @@
+---
+title: "Estudio de las notas según la carrera"
+author: "Santiago Pérez Moncada"
+date: "26/6/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+Cargando los datos 
+
+```{r}
+data = read.table("../data/grades.txt",header = TRUE)
+head(data)
+str(data)
+```
+
+**1. Calcula la media, la mediana y la moda redondeada a dos cifras decimales de las notas numéricas de los exámenes tanto de forma conjunta como por estudio universitario. ¿En qué grupo observamos la nota más alta? ¿Qué grupo está por encima de la media de estudiantes?**
+
+```{r}
+library(modeest)
+
+round(mean(data$nota),2)##Media de las notas en general
+round(median(data$nota),2) ## Mediana general
+mlv(data$nota, method = 'mfv') ## moda general
+
+
+round(by(data$nota, data$estudio, FUN = mean),2)##Media por carrera
+round(by(data$nota, data$estudio, FUN = median),2)#Mediana por carrera
+round(by(data$nota, data$estudio, FUN = mlv),2)#moda por carrera
+```
+Observamos que el grupo de matemáticas es el que tiene notas más altas podemos observarlo claramente en su media de notas y en la mediana ambas son las mas altas en comparación a los de mas grupos. 
+
+
+**2. ¿En qué grupo observamos más variación de notas? Justifica tu respuesta**
+
+```{r}
+by(data$nota, data$estudio, FUN = IQR)
+```
+
+Observamos que el rango intercuartilico de la carrera de Matemáticas es mayor al de las demas carrera por lo tanto este grupo tiene más variación al de los demas.
+
+**3. ¿Hay mucha diferencia entre el grupo que has respondido en el ejercicio 1 y en el ejercicio 2? Intenta dar una explicación objetiva del suceso**
+
+No hay diferencia siguo en la misma conclusion que matemáticas es el grupo con notas mas altas y el grupo con mas variacion puesto que hay hay una mayor rango de notas altas.pero tambien hay unas cuantas notas bajas y tenemos un poco mas de amplitud.
+
+**4. Dibuja en un único gráfico los cuatro diagramas de caja, uno para cada grupo. Añade así mismo la nota media, pon nombre, título y color al gráfico para documentar el gráfico correctamente.**
+
+```{r}
+boxplot(nota~estudio, data = data, col='deepskyblue3',
+        xlab = "Carrera", ylab = "Notas")
+```
+
+**5. ¿Observas algunos valores atípicos en el boxplot anterior? ¿A qué grupo pertence? **
+
+Podemos observae que el grupo de industrial, informatica y telematica tienen valores atipicos el unico que no tiene es el grupo de matemáticas.
+
+**6. Indica a partir del boxplot anterior en qué grupo observamos más variedad de notas.**
+
+EL grupo con mayor variedad de notas es el de matemáticas como ya habiamos deducido anteriormente.
+
+**7. En base a todo lo anterior, ¿puedes afirmar de forma estadística que el examen de carrera ha ido mejor en algún estudio que en los demás? **
+
+Si, a la carrera de matemáticas les fue mejor en su examen, en comparación de las demas carreras.

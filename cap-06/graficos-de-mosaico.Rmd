@@ -1,0 +1,56 @@
+---
+title: "Gráficos de Mosaico"
+author: "Santiago Pérez Moncada"
+date: "12/6/2020"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Otra representacion de las tablas multidimensionales de frecuencias son los **gráficos de mosaico**. Estos gráficos se obtienen sustituyendo cada entrada de la tabla de frecuencias por una region rectangular de área proporcional a su valor.
+
+En concreto, para obtener el gráfico de mosaico de una tabla bidimensional, se parte de un cuadrado de lado 1, primero se divide en barras verticales de amplitudes iguales a las frecuencias relativas de una variable, luego cada barra se divide, a lo alto, en regiones dealturas proporcionales a las frecuencias relativas marginales de cada nivel de la otra variable dentro del nivel correspondiente a la primera variable.
+
+Un gráfico de mosaico de una tabla se obtiene con R aplicando la función `plot` a la tabla o también la funcion `mosaicplot`. Esta ultima tambien se puede aplicar a matrices.
+
+```{r}
+
+Sexo = factor(sample(c("Hombre","Mujer"), size = 20, replace = TRUE))
+Respuestas = factor(sample(c("Si","No"), size = 20, replace = TRUE))
+
+plot(table(Sexo,Respuestas), main = "Grafico de mosaico de las variables \"Sexo\" y \"Respuestas\"")
+```
+
+En el gráfico de mosaico deuna tabla tridimensional, primero se divide el cuadrado en barras vertivales de amplitudes iguales a las frecuaencias relativas de una variable.
+
+Luego cada barra se divide, a lo alto, en regiones de alturas proporcionales a las frecuencias relativas marginales de cada nivel de una segunda variable, dentro del nivel correspondiente de la primera variable.
+
+Finalmente, cada sector rectangular se vuelve a dividir a lo ancho en regiones de amplitudes proporcionales a las frecuencias relativas marginales de cada nivel de la tercera variable dentro de la combinacion correspondiente de niveles de las otras dos.
+
+```{r}
+plot(HairEyeColor, main="Grafico de mosaico de la tabla HairEyeColor",
+     col = c("pink","lightblue"))
+```
+
+# Muchos más gráficos
+
+Además de sus parámetros usuales, la función `plot` admite algunos parametros específicos cuando se usa para producir el gráfico de mosaico de una tabla. estos parámetros se pueden consultar en `help(mosaicplot)`.
+
+Los paquetes `vcd` y `vcdExtra` incluyen otras funciones que producen representaciones gráficas interesantes de tablas tridimensionales.
+
+```{r}
+library(vcd)
+library(vcdExtra)
+```
+
+* La función `cotabplot` de `vcd` produce un diagrama de mosaico para cada nivel de la tercera variable.
+
+* La funcion `mosaic3d` de `vcdExtra` produce un diagrama de mosaico tridimensional en una ventana de aplicación para gráficos 3D interactivos.  
+```{r}
+cotabplot(HairEyeColor)
+mosaic3d(HairEyeColor, type = "expected", box = TRUE, col = c("blue","pink"))
+```
+
+

@@ -1,0 +1,122 @@
+---
+title: "Estudiando Datos Agrupados"
+author: "Santiago Pérez Moncada"
+date: "4/7/2020"
+output:
+  pdf_document: default
+  html_document:
+    df_print: paged
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Frecuencias
+
+Una primera consideración es tratar las clases obtenidas en el paso anterior como los niveles de una variable ordinal y calcular sus frecuencias.
+
+*   **La frecuencia absoluta** de una clase será el número de datos originales que pertenecen a la clase.
+
+*   **La frecuencia absoluta acumulada** de una clase será el número de datos que pertenecen a dicha clase     o alguna de las anteriores.
+
+
+Normalmente, las frecuencias de un conjunto de datos agrupados suele representarse de la siguiente forma.
+
+*   $X_{j}$ marca de clase.
+
+*   $n_{j}$ Frecuencia absoluta.
+
+*   $N_{j}$ Frecuencia absoluta acumulada.
+
+*   $f_{j}$ Frecuencia relativa.
+
+*   $F_{j}$ Frecuencia relativa acumulada.
+
+|   Intervalos    |       $X_{j}$     |       $n_{j}$     |       $f_{j}$     |       $F_{j}$     |
+|-----------------|-------------------|-------------------|-------------------|-------------------|
+| $[L_{1},L_{2})$ |       $X_{1}$     |       $n_{1}$     |       $f_{1}$     |       $F_{1}$     |
+| $[L_{2},L_{3})$ |       $X_{2}$     |       $n_{2}$     |       $f_{2}$     |       $F_{2}$     |
+| $\vdots$        |       $\vdots$    |       $\vdots$    |       $\vdots$    |       $\vdots$    |
+| $[L_{k},L_{k+1})$|       $X_{k}$    |       $n_{k}$     |       $f_{k}$     |       $F_{k}$     |
+
+
+## La Función `hist`
+
+El cálculo de las frecuencias con `R` podemos hacerlo mediante las funciones, `table`,`prop.table` y `cumsum`.
+
+También podemos utilizar la función `hist`, que internamente genera una list cuya componente `count` es el vector de frecuencias absolutas de las clases.Por lo consiguiente, para calcular estas frecuencias, podemos utilizar la sintaxis.
+
+`hist(x, breaks=..., right=FALSE, plot=FAlSE)$count`
+
+Conviene igualar el parámetro `breaks` al vector de los extremos del intervalo debido a que `cut` y `hist` hacen uso de diferentes métodos para agrupar los datos cuando se especifica solamente el número $k$ de clases.
+
+El resultado de `hist` incluye la componente `mids` que contiene el vector de puntos medios de los intervalos, es decir, nuestras marcas de clase.
+
+
+Podemos automatizar el cálculo de la ya tan mencionada table de frecuencias, utilizando las dos funciones que mostramos a continuación.
+
+La primera sirve en el caso en que vayamos a tomar las clases de la misma amplitud.Sus parámetros son: $x$, el vector con los datos cuantitativos; $k$, el numero de clases; $A$, su amplitud; y $p$ la precisión de los datos($p=1$ si la presición son unidades, $p=0.1$ si la precisión son décimas de unidad...).
+
+Por su parte, la segunda es para cuando conocemos los extremos de las clases.Sus parámetros son $x$ el vector con los datos cuantitativos; $L$, el vector de extremos de clases y $V$ un valor lógico, que ha de ser `True` si queremos que el último intervalo sea cerrado, y `FALSE` en caso contrario.
+
+
+###   Primera función 
+
+```{r}
+TablaFrecs1 = function(x,k,A,p){
+  L = min(x)-p/2+A*(0:k)
+  x_cut = cut(x, breaks = L, right = FALSE)
+  intervals = levels(x_cut)
+  mc = (L[1]+L[2])/2 +A *(0:(k-1))
+  Fr.abs = as.vector(table(x_cut))
+  Fr.rel = round(Fr.abs/length(x),4)
+  Fr.cum.abs = cumsum(Fr.abs)
+  Fr.cum.rel = cumsum(Fr.rel)
+  tabla = data.frame(intervals, mc, Fr.abs,Fr.cum.abs,Fr.rel,Fr.cum.rel)
+  tabla
+}
+```
+
+###   Segunda función 
+
+```{r}
+TablaFrecs2 = function(x,L,V){
+  x_cut = cut(x, breaks = L, right = FALSE, iinclude.lowest = V)
+  intervals = levels(x_cut)
+  mc = (L[1:(length(L))-1]+L[2:(length(L))])/2
+  Fr.abs = as.vector(table(x_cut))
+  Fr.rel = round(Fr.abs/length(x),4)
+  Fr.cum.abs = cumsum(Fr.abs)
+  Fr.cum.rel = cumsum(Fr.rel)
+  tabla = data.frame(intervals, mc, Fr.abs,Fr.cum.abs,Fr.rel,Fr.cum.rel)
+  tabla
+}
+```
+
+
+La tabla de frecuencias de la longitud de los petalos de iris.
+
+```{r}
+petals = iris$Petal.Length
+
+TablaFrecs1(petals, k = 6, A = 1, p = 0.1)
+TablaFrecs2(petals, L = c(1:7), V = FALSE )
+```
+
+## Ejemplo
+
+Siguiendo con el ejemplo de las anchuras de los cangrejos, vamos a calcular sus tablas de frecuecnias haciendo uso de todo lo aprendido anteriormente.
+
+```{r}
+data = read.table("../data/datacrab.txt",header = TRUE)
+CW = data$width
+
+k = nclass.Sturges(CW)
+A = (max(CW)-min(CW))/k
+A
+A = 1.5
+p = 0.1
+TablaFrecs1(CW,k,A,p)
+```
+

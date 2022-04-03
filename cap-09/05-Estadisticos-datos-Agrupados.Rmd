@@ -1,0 +1,102 @@
+---
+title: "Estadísticos para Datos Agrupados"
+author: "Santiago Pérez Moncada"
+date: "13/7/2020"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Al tener una muestra de datos numéricos, conviene calcular los **estadísticos** antes de realizar los agrupamientos, puesto de los contrario podemos perder información.
+
+No obstante, hay situaciones en que los datos los obtenemos ya agrupados.En estos casos, aún sigue siendo posible calcular estadísticos y utilizarlos como aproximaciones de los datos "reales", los cuales no conocemos.
+
+## Estadísticos para datos agrupados
+
+La media $\bar{x}$, la varianza $s^2$, la varianza muestral $\tilde{s}^2$, la desviación típica $s$ y la desviación típica muestral $\tilde{s}$ de un conjunto de datos agrupados se calculan mediante las mismas fórmulas que para los datos no agrupados la única diferencia es que sustituimos cada clase por su marca de clase y la contamos con su frecuencia.
+
+Es decir si tenemos $k$ clases, con sus respectivas marcas $X_{1},...,X_{k}$ con frecuencias absolutas $n_{1},...,n_{k}$ de forma que $n = \sum_{j=1}^k n_{j}$ entonces.
+
+$$\bar{x} = \frac{\sum_{j=1}^k n_{j}X_{j}}{n}\newline$$
+$$s^2 = \frac{\sum_{j=1}^k n_{j}X_{j}^2}{n} - \bar{x}^2$$
+$$\tilde{s}^2 = \frac{n}{n-1}\cdot s^2$$
+
+$$s = \sqrt{s^2} ,\hspace{2em} \tilde{s} = \sqrt{\tilde{s}^2}$$
+
+## Intervalo Modal
+
+En lo referente a la moda, esta se sustituye por el **intervalo modal**, que es la clase con mayor frecuencia(absoluta o relativa).
+
+En el caso en que un valor numérico fuera necesario, se tomaría su marca de clase.
+
+## Intervalo crítico para la mediana.
+
+Se conoce como **intervalo crítico para la mediana**, $[L_{c},L_{c+1})$ al primer intervalo donde la frecuencia relativa acumulada sea mayor o igual que 0.5
+
+Denotemos por $n_{c}$ su frecuencia absoluta, por $A_{c} = L_{c+1} - L_{c}$ su amplitud y por $N_{c-1}$ la frecuencia acumulada del intervalo inmediatemente anterior(en caso de ser $[L_{c},L_{c+1}) = [L_{1},L_{2})$, entonces $N_{c-1} = 0$). Entonces, $M$ será una aproximacion para la mediana de los datos "reales" a partir de los datos agrupados.
+
+$$M = L_{c} + A_{c} \cdot \frac{\frac{n}{2}-N_{c-1}}{n_{c}}$$¸
+
+## Aproximación de los Cunatiles
+
+La fórmula anterior nos permite aproximar el cuantil $Q_{p}$ de los datos reales apartir de los datos agrupados.
+
+$$Q_{p} = L_{p} + A_{p}\cdot \frac{p\cdot n - N_{p-1}}{n_{p}}$$
+donde el intervalo $[L_{p},L_{p+1})$ denota el primer intervalo cuya frecuencia relativa acumulada es mayor o igual a $p¸$
+
+# Ejemplo
+
+```{r}
+TablaFrecs1 = function(x,k,A,p){
+  L = min(x)-p/2+A*(0:k)
+  x_cut = cut(x, breaks = L, right = FALSE)
+  intervals = levels(x_cut)
+  mc = (L[1]+L[2])/2 +A *(0:(k-1))
+  Fr.abs = as.vector(table(x_cut))
+  Fr.rel = round(Fr.abs/length(x),4)
+  Fr.cum.abs = cumsum(Fr.abs)
+  Fr.cum.rel = cumsum(Fr.rel)
+  tabla = data.frame(intervals, mc, Fr.abs,Fr.cum.abs,Fr.rel,Fr.cum.rel)
+  tabla
+}
+
+
+data = read.table("../data/datacrab.txt",header = TRUE)
+CW = data$width
+k = nclass.Sturges(CW)
+A = (max(CW)-min(CW))/k
+A = 1.5
+p = 0.1
+
+
+tabla = TablaFrecs1(CW,k,A,p)
+tabla
+
+TotalObs = tabla$Fr.cum.abs[9]
+TotalObs
+
+anchura.media = round(sum(tabla$Fr.abs * tabla$mc)/TotalObs ,3)
+anchura.media
+
+anchura.var = round(sum(tabla$Fr.abs*tabla$mc^2)/TotalObs - anchura.media^2,3)
+anchura.var
+
+anchura.std = round(sqrt(anchura.var),3)
+anchura.std
+
+I.modal = tabla$intervals[which(tabla$Fr.abs == max(tabla$Fr.abs))]
+I.modal
+```
+
+Por lo tanto, con los datos de los que disponemos, podemos afirmar que la anchura media de los cangrejos de la muestra es de $\bar{x} = 26.373$mm , con una desviacion típica $s = 4.674$mm y que el grupo de anchuras más numeroso era el de $[25.4,26.9)$.
+
+Pasemos ahora a calcular el intervalo crítico para la mediana.
+
+```{r}
+I.critic = tabla$intervals[which(tabla$Fr.cum.rel >= 0.5)]
+I.critic[1]
+```
+
+

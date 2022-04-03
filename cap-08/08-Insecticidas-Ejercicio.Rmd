@@ -1,0 +1,37 @@
+---
+title: "Insecticidas"
+author: "Santiago Pérez Moncada"
+date: "26/6/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Analisis de spray insecticida
+
+Cargamos los datos del data set de `R` llamado `InsectSpray`
+
+```{r}
+data = InsectSprays
+head(data)
+str(data)
+```
+
+
+```{r}
+by(data$count, data$spray, FUN = summary)
+```
+
+```{r}
+aggregate(count~spray, data = data, FUN = sd)
+```
+
+
+```{r}
+boxplot(count~spray, data = data, col="lightgreen",
+        xlab = "Tipo de Spray", ylab = "Insectos muertos")
+```
+
+

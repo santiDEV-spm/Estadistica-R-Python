@@ -1,0 +1,90 @@
+---
+title: "Medidas de Tendencia Central"
+author: "Santiago Pérez Moncada"
+date: "20/6/2020"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Las **Medidas de tendencia central** son las que dan un valor representativo a todas las observaciones. Algunas de las mas importantes son:
+
+*   La **Media aritmética** o **valor medio**
+
+$$
+\bar{x} = \frac{\sum_{i=1}^{n}x_{i}}{n} = \frac{\sum_{j=1}^{k}n_{i}X_{j}}{n} = 
+\sum_{j=1}^{k} f_{j}X_{j}
+$$
+
+* La **mediana**, que representa el valor central en la lista ordenada de observaciones.
+
+* La **moda** es el valor (o valores) de máxima frecuencia (absoluta o relativa, el resultado será el mismo).
+
+## La mediana
+
+La definición formal de la mediana es la siguiente. Denotando por
+
+$$x_{(1)} \leqslant x_{(2)} \leqslant ...\leqslant x_{(n)}$$
+Los datos de la variable cuantitativa ordenados de menor a mayor, la mediana es
+
+*   Si $n$ es par, la mediana es
+
+$$
+\frac{x_{\frac{n}{2}}+x_{\frac{n}{2}+1}}{2}
+$$
+* Si $n$ es impar, el dato central es $x_{\frac{n+1}{2}}$
+
+## Ejemplo 1
+
+```{r}
+edades = c(13,40,12,27,18,11,40,23,19,18,30,32,40,26,17,12,22,17,40,12)
+sort(edades)
+table(edades)
+```
+En este caso **la moda** es 40, **la mediana** es $\frac{19+22}{2} = 20.5$ y **la media aritmetica** es:
+
+$$
+\frac{13+40+12+27+18+11+40+23+19+18+30+32+40+26+17+12+22+17+40+12}{20} = 23.45
+$$
+
+
+## Ejercicio 2
+
+```{r}
+set.seed(2020)
+dados = sample(1:6,size = 25,replace = TRUE)
+sort(dados)
+
+table(dados) #Frecuencia absoluta
+round(prop.table(table(dados)),2) #Frecuencia Relativa global
+cumsum(table(dados)) #Frecuencia absoluta acumulada
+round(cumsum(prop.table(table(dados))),2) #Frecuencia relativa acumulada
+
+dados.df = data.frame(Puntuacion = 1:6,
+                      Fr.abs = as.vector(table(dados)),
+                      Fr.rel = as.vector(round(prop.table(table(dados)),2)),
+                      Fr.acu = as.vector(cumsum(table(dados))),
+                      Fr.rel.acu = as.vector(round(cumsum(prop.table(table(dados))),2)))
+
+dados.df
+set.seed(NULL)
+```
+
+En este caso la **Moda** son tres valores 2,4,6 **la mediana** es $x_{(13)} = 4$ y la **media aritmetica** es `r mean(dados)`
+
+Vamos a calcular la media aritmetica, mediana, moda de los ejemplos anteriores con instrucciones de R.
+
+```{r}
+mean(edades) # media aritmetica
+mean(dados)
+
+median(edades) #mediana
+median(dados)
+
+as.numeric(names(which(table(edades) == max(table(edades))))) #moda
+as.numeric(names(which(table(dados) == max(table(dados)))))
+```
+
+Cuando trabajamos con datos cuantitativos, es conveniente que el resultado lo demos con un número.De ahí que hayamos aplicado la función `as.numeric`

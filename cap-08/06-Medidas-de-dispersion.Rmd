@@ -1,0 +1,150 @@
+---
+title: "Medidas de Dispersión"
+author: "Santiago Pérez Moncada"
+date: "23/6/2020"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Las **Medidas de dispersión** evalúan lo dispersos que están los datos.Algunas de las más importantes son:
+
+*   El **Rango** o **Recorrido**, que es la diferencia entre el máximo y el mínimo de las        observaciones.
+
+*   El **Rango intercuartílico**, que es la diferencia entre el tercer y primer cuartil,
+    $Q_{0.75} - Q_{0.25}$.
+    
+*   La **Varianza**, a la que denotamos $s^2$, es la media aritmética de las diferencias al     cuadrado entre los datos $x_{i}$ y la media aritmetica de las observaciones,               $\bar{x}$.
+
+$$
+s^2 = \frac{\sum_{j=1}^n(x_{j}-\bar{x})^2}{n} = \frac{\sum_{j=1}^kn_{j}(X_{j}-\bar{x})^2}{n} = \sum_{j=1}^k{f_{j}(X_{j}-\bar{x})^2}
+$$
+
+* La **desviación típica** es la raíz cuadrada positiva de la varianza, $std = \sqrt{s^2}$
+
+* La **varianza muestral** es la corrección de la varianza.La denotamos por $\tilde{s}^2$
+
+$$
+\tilde{s}^2 = \frac{n}{n-1}s^2 = \frac{\sum_{j=1}^n(x_{j}-\bar{x})^2}{n-1}
+$$
+* La **desviación típica muestral**, que es la raíz cuadrada positiva de la varianza muestral, $\tilde{s} = \sqrt{\tilde{s}^2}$
+
+## Propiedades de la Varianza
+
+* $s^2 \geq 0$ esto de debe a que, por definición, es una suma de cuadrados de números reales.
+
+* $s^2 = 0 \Rightarrow x_{j}-\bar{x} = 0 \;\; \forall j = 1,2,...,n$.En consecuencia si $s^2 = 0$ todos los datos son iguales.
+
+*   $s^2 = \frac{\sum_{j=1}^n x_{j}^2}{n} - \bar{x}^2$. Es decir, la varianza es la media de los cuadrados de los datos menos el cuadrado de la media aritmética de estos.
+
+## Varianza y Varianza Muestral
+
+La diferencia entre ambas definiciones viene por la interrelación entre la estadística descriptiva y la inferencial.
+
+Por un lado, es normal medir cómo varían los datos cuantitativos mediante su varianza definida como la media aritmética de las distancias al cuadrado de los datos a su valor medio.No obstante, por otro lado, el conjunto de nuestras observaciones, por lo normal, será una muestra de una población mucho mayor y nos interesará estimar entre muchas cosas su variabilidad.
+
+La varianza de una muestra suele dar valores más pequeños que la varianza de la población, mientra que la varianza muestral tiende a dar valores alrededor de la varianza de la población.
+
+Esta corrección, para el caso de una muestra grande no es notable. Dividir $n$ entre $n-1$ en el caso de que $n$ ser grande no significa una gran diferencia y aún menos si tenemos en cuenta que lo que tratamos es de estimar la varianza de población, no de calcularla de forma exacta.
+
+En cambio, si la muestra es relativamente pequeña digamos $n<30$, entonces **la varianza muestral** de la muestra aproxima significativamente mejor que la **varianza poblacional**.
+
+La diferencia entre desviación típica y desviación típica muestral es análoga.
+
+Con `R` calcularemos la varianza y desviacion típica muestrales.Con lo cual, si queremos calcular las que no son muestrales, tendremos que multiplicarlas por $\frac{n-1}{n}$ donde $n$ es el tamaño de la muestra. lo veremos a continuación.
+
+# Medidas de Dispersión con `R`
+
+|   Medida de dispersión    |    Instrucción   |
+|---------------------------|------------------|
+|Valor minimo y max         |`range(x)`        |
+|Rango                      |`diff(range(x)`   |
+|Rango intercuartilico      |`IQR(x,type=...)` |
+|Varianza Muestral          |`var(x)`          |
+|Desviación típica muestral |`sd(x)`           |
+|Varianza                   |`var(x)*(length(x)-1)/length(x)`|
+|Desviación típica          |`sd(c)*sqrt((length(x)-1)/length(x))`|
+
+# Ejemplo
+
+
+```{r}
+
+dados = sample(1:6,15, replace = TRUE)
+dados
+
+diff(range(dados)) # rango
+IQR(dados) #Q_0.75 - Q_0.25 
+var(dados) #varianza muestral
+sd(dados) #desviacion tipica muestral
+
+n = length(dados)
+var(dados)*(n-1)/n #varianza poblacional
+sd(dados)*sqrt((n-1)/n) #desviacion tipica poblacional
+```
+
+
+# Función `summary()`
+
+La función `summary` aplicada a un vector numérico o a una variable cuantitativa nos devuelve un resumen estadístico con los valores mínimo y máximo del vector, sus tres cuartiles y su media.
+
+Al aplicar esta función a un data frame, esta se aplica a todas sus variables de forma simultánea.De este modo, podemos observar rápidamente si hay diferencias notables entre sus variables numéricas.
+
+## Ejemplo
+
+```{r}
+cangrejos = read.table("../data/datacrab.txt",header = TRUE) #CARGAMOS DATOS
+cangrejos = cangrejos[-1]#eliminamos la primer columna
+summary(cangrejos)
+```
+
+Si nos interesa comparar numéricamente los pesos y las anchuras de los cangrejos con 3 colores con los que tienen 5 colores, utilizamos las siguientes instrucciones:
+
+```{r}
+summary(subset(cangrejos, color == 3, c("weight","width")))
+summary(subset(cangrejos, color == 5, c("weight","width")))
+```
+
+Y deducimos que los cangrejos con 5 colores pesan ligeramente menos y tienen menos anchura que los que tienen 3 colores.
+
+
+# Funcion `by()`
+
+La función `by()` se utiliza para aplicar una determinada función a algunas de las columnas de un data frame segmentándolas según los niveles de un factor.
+
+La sintaxis de esta función es `by(columnas, factor, FUN = función)`.
+
+Con lo cual, haciendo uso de la función `by` y especificando `FUN = summary`, podemos calcular el resumen estadistico anteriormente comentado a subpoblaciones definidas por los niveles de un factor.
+
+
+## Ejemplo 
+
+Para este ejemplo, haremos uso del famoso dataset iris.
+
+Si nos interesa calcular de forma rápida y sencilla las longuitudes de los sépalos y petalos en función de la especie, necesitaríamos hacer uso de la instrucción mostrada a continuación.
+
+```{r}
+head(iris)
+
+by(iris[,c(1,3)], iris$Species, FUN = summary)
+
+```
+
+Tanto la función `by` como la función `aggregate` son equivalentes. No obstante, los resultados se muestran de forma diferente en función de cual utilicemos.
+
+En el caso del ejemplo anterior, convenía más hacer uso de la función `by`.
+
+Podemos comprobarlo introduciendo la siguiente instruccion.
+
+```{r}
+aggregate(cbind(Sepal.Length,Petal.Length)~Species, data = iris, FUN = summary)
+```
+
+# Valores NA
+
+La mayoria de las funciones vistas a lo largo de este tema no funcionan bien con los valores **NA**.
+
+Para no tenerlos en cuenta a la hora de aplicar estas funciones, hay que especificar el parámetro `na.rm = TRUE` en el argumento de la función.
+

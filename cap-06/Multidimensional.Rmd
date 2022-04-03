@@ -1,0 +1,42 @@
+---
+title: "Multivariante"
+author: "Santiago Pérez Moncada"
+date: "10/6/2020"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Datos Multidimensionales
+
+## Ejemplo con tres dimensiones
+
+```{r}
+ans = sample(c("Si","No"), size = 100, replace = TRUE)
+sex = sample(c("H","M"), size = 100, replace = TRUE)
+place = sample(c("San francisco","Barcelona","Valencia","Mexico","Madrid"), 
+                size = 100, replace = TRUE )
+
+table(sex,ans,place)
+ftable(sex,ans,place)
+ftable(sex,ans,place,col.vars = c("sex", "ans"))
+```
+
+### Filtrar las tablas
+```{r}
+table(sex,ans,place)["M","Si","San francisco"]
+table(sex, ans, place)[,"Si","Valencia"]
+table(sex,ans,place)[, "No",]
+```
+
+### Frecuencias relativas
+```{r}
+prop.table(table(sex,ans,place)) # Frec.relativas globales
+prop.table(table(sex, ans, place), margin = 3) # Frec.Relativa. Marginal por pais
+prop.table(table(sex, ans, place), margin = c(1,3)) # Frec.Relativa. Marginal por Sexo y pais
+
+ftable(prop.table(table(sex,ans,place)))
+```
+

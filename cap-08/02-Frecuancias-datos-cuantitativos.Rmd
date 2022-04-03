@@ -1,0 +1,78 @@
+---
+title: "Frecuencias de Datos Cuantitativos"
+author: "Santiago Pérez Moncada"
+date: "20/6/2020"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+El tratamiento de las frecuencias de datos cuantitativos es similar al de los datos ordinales. La cosa cambia ligeramente debido a que no se tienen en cuenta todos los niveles posibles, sino únicamente los observados.
+
+## Ejemplo 1
+
+```{r}
+edades = sample(1:50, size = 20, replace = TRUE)
+edades
+```
+Recordemos que solamente nos interesan las frecuencias de las edades observadas.E s decir, solamente nos interesan
+
+```{r}
+table(edades)
+```
+
+Calculemos el resto de frecuencias como ya sabemos
+
+```{r}
+round(prop.table(table(edades)),3)#Frec.Relativa
+cumsum(table(edades))#Frec.Acumulada.Absoluta
+round(cumsum(prop.table(table(edades))),3) #Frec.Acumulada.Relativa
+```
+
+En general, supongamos que tenemos $n$ observaciones de una propiedad que se mide con un numero real y obtenemos la variable cuantitativa formada por los datos.
+
+$$x_{1},...,x_{n}$$
+
+Sean ahora $X_{1},...,X_{K}$ los valores distintos que aparecen en esta lista de datos y considerémoslos ordenados.
+
+$$X_{1} < X_{2}<...<X_{k}$$
+Entonces, en esta variable cuantitativa
+
+* La frecuencia absoluta $X_{i}$ es el número $n_{i}$ de elementos que son iguales a         $X_{i}$
+
+* La frecuencia relativa de $X_{i}$ es $f_{i} = \frac{n_{i}}{n}$
+
+* La frecuencia absoluta acumulada de $X_{i}$ es $N_{i} = \sum_{j=1}^{i}n_{j}$
+
+* La frecuencia relativa acumulada de $X_{i}$ es $F_{i} = \frac{N_{i}}{n}$
+
+## Ejemplo 2
+
+Lanzamos 25 veces un dado de 6 caras y anotamos las puntuaciones obtenidas en cada tirada.
+En este caso $n = 25$ y los distintos valores observados son
+
+$$X_{1} = 1, X_{2} = 2, X_{3} = 3, X_{4} = 4, X_{5} = 5, X_{6} = 6$$
+
+Nos interesa ahora calcular las frecuencias de este experimento. Además, las organizaremos en un data frame para observarlas de forma más clara y sencilla en una tabla.
+
+```{r}
+dados = sample(1:6,size = 25,replace = TRUE)
+dados
+
+table(dados) #Frecuencia absoluta
+round(prop.table(table(dados)),2) #Frecuencia Relativa global
+cumsum(table(dados)) #Frecuencia absoluta acumulada
+round(cumsum(prop.table(table(dados))),2) #Frecuencia relativa acumulada
+
+dados.df = data.frame(Puntuacion = 1:6,
+                      Fr.abs = as.vector(table(dados)),
+                      Fr.rel = as.vector(round(prop.table(table(dados)),2)),
+                      Fr.acu = as.vector(cumsum(table(dados))),
+                      Fr.rel.acu = as.vector(round(cumsum(prop.table(table(dados))),2)))
+
+dados.df
+```
+
+Para entrar una tabla unidimensional como variable en un data frame, es conveniente transformarla en un vector con `as.vector`.Si no, cada `table` y `prop.table` añadiran una columna extra con los nombres de los niveles.

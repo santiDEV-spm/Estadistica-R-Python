@@ -1,0 +1,110 @@
+---
+title: "Tablas de Frecuencias Bidimensionales"
+author: "Santiago Pérez Moncada"
+date: "3/6/2020"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Frecuencias Absolutas
+
+La funcion `table()` tambien permite construir tablas de frecuencias conjuntas de dos o mas variables.
+
+```{r}
+Respuestas =factor(sample(c('Si','No'), size = 12, replace = TRUE))
+Respuestas
+```
+
+<p style='text-align: justify;'>
+Supongamos que el vector `Respuestas` anterior contiene las respuestas de una pregunta dadas por unos individuos cuyos sexos tenemos almacenados en un vector `Sexo` en el mismo orden que sus respuestas. en este caso, podemos construir una tabla que nos diga cuantas personas de cada sexo han dado cada respuesta. </p>
+
+```{r}
+#H = hombre M = Mujer
+Sexo = sample(c("H","M"), size = length(Respuestas), replace = TRUE)
+Sexo
+table(Respuestas, Sexo)
+
+table(Sexo,Respuestas)
+t(table(Respuestas,Sexo))
+```
+
+Para referirnos a una entrada de una tabla bidimensional podemos usar lo siguiente
+```{r}
+table(Respuestas,Sexo)[1,2]
+table(Respuestas,Sexo)["No","M"]
+```
+
+# Frecuencias Relativas
+
+<p style='text-align: justify;'> 
+
+Como en el caso unidimensional, la funcion `prop.table()` sirve para calcular tablas bidimensionales de frecuencias relativas conjunta de pares de variable. Pero en el caso bidimensional tenemos dos **tipos de Frecuencias relativas**:
+
+ * **Frecuencias relativas globales**: para cada par e niveles, uno de cada      variable,la fraccion de individuos que pertenece a ambos niveles respecto del total de la muestra.
+ 
+ * **Frecuencias relativas marginales**: dentro de cada nivel de una variable y para cada nivel de la otra, la fraccion de los individuos que pertenecen al segundo nivel respecto del total de la subpoblacion definida por el primer nivel.
+ 
+Dadas dos variables, se pueden calcular dos familias de frecuencias relativas marginales, segun cual sea la variable que defina las subpoblaciones en las que calculemos las frecuencias relativas de los niveles de la otra variable; no es lo mismo la fraccion de mujeres que han conterstado que sí respecto del toatal de mujeres, que la fraccion de mujeres que han contestado que sí respecto del total de personas que han dado la misma respuesta. </p>
+
+# Tabla de Frecuencias Relativas Globales
+```{r}
+prop.table(table(Sexo,Respuestas)) #Global
+```
+
+# Tablas de Frecuencias Relativas Marginales
+
+<p style='text-align: justify;'>
+Para obtener las marginales, debemos usar el parametro `margin` al aplicar la funcion `prop.table()` a la `table`. Con `margin=1` obtenemos las frecuencias relativas de las filas y con `margin=2` de las columnas .
+</p>
+
+```{r}
+prop.table(table(Sexo,Respuestas), margin = 1) # Por sexo
+prop.table(table(Sexo,Respuestas), margin = 2) # Por respuesta
+```
+
+# Tabla de frecuencias bidimensionales
+
+La función `CrossTable()` del paquete `gmodels` permite producir(especificando el parametro `prop.chisq = FALSE`) un resumen de la tabla de frecuencias absolutas y las tablas de las frecuencias relativas de dos variables en un formato adecuado para su visualizacion.
+
+La leyenda `Cell Contents` explica los contenidos de cada celda de la tablas: La frecuencia absoluta, la frecuencias relativa por filas, la frecuencia relativa por columnas y la frecuaencia global. Esta funcion dispone de muchos parámetros que permiten modificar el contenido de las celdas y que puedes consultar en `help(CrossTable)`.
+
+## Paquete `gmodels`
+```{r}
+library(gmodels)
+sex = factor(c("H","M","M","M","M","H","H","M","M"))
+ans = factor(c("S","N","S","N","N","S","N","S","S"))
+CrossTable(sex, ans, prop.chisq = FALSE)
+```
+
+Una **tabla de contingencia bidimensional** es basicamente, una matriz con algunos atributos extras. En particular, podemos usar sobre estas tablas la mayoria de las funciones para matrices que tengan sentido para tablas.
+
+*  `rowSums` y `colSumns` se pueden aplicar a una tabla y suman sus filas y columnas respectivamente.
+
+* Tambien podemos usar sobre una tabla bidimensional (o , en general, multidimensional) la funcion `apply()` con la misma sintaxis parara matrices.
+
+```{r}
+table(Sexo,Respuestas)
+colSums(table(Sexo,Respuestas))
+rowSums(table(Sexo,Respuestas))
+```
+
+# Ejemplo
+Sin usar `gmodels`
+```{r}
+tt <- table(sex,ans)
+tt # frecuencias abosolutas
+prop.table(tt) # relativas globales
+prop.table(tt, margin = 1) # relativas por filas(sexo)
+prop.table(tt, margin = 2) # relativas por columna(Respuesta)
+
+colSums(tt)
+rowSums(tt)
+colSums(prop.table(tt))
+rowSums(prop.table(tt))
+```
+

@@ -1,0 +1,127 @@
+---
+title: "Carga de data Frames"
+author: "Santiago Pérez Moncada"
+date: "22/5/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Carga de ficheros local
+
+Breed (1/5/8),
+Sale Price, 
+Yearling height at shoulder (in.), 
+Fat Free Body (lbs.),
+Percent Fat-free body,
+Frame -- scale from 1 (small) to 8 (large), 
+Back fat (in.),
+sale height at shoulder (in.), 
+sale weight (lbs.) of three breeds of bulls
+
+```{r}
+df = read.table("../data/bulls.dat",
+                header = FALSE,
+                col.names = c("bread","sale_price","shoulder",
+                          "fat_free","percent_ff","frame_scale",
+                          "back_fat","sale_height","sale_weight"),
+                
+                sep = "", dec="."
+                )
+head(df)
+```
+
+# Carga desde URL
+```{r}
+df = read.table("https://maitra.public.iastate.edu/stat501/datasets/dogs.dat",
+                header = FALSE,
+                col.names = c("high CO_2 pressure","low CO_2 pressure",
+                              "high pressure + halothane",
+                              "low pressure + halothane",
+                              "Y"))
+head(df)
+str(df)
+```
+
+# Factores en DataFrame
+
+```{r}
+df3 = read.table("https://maitra.public.iastate.edu/stat501/datasets/olive.dat",
+                 stringsAsFactors = FALSE,
+                 header = TRUE)
+str(df3)
+```
+
+# Guardar un dataframe
+```{r}
+write.table(df3, file = "../data/olive.txt", dec=".")
+df4 = read.table("../data/olive.txt", header = TRUE, dec=".")
+head(df4)
+```
+
+# Construyendo dataframes
+```{r}
+
+Algebra = c(1,2,0,5,4,6,7,5,5,8)
+Analysis = c(3,3,2,7,9,5,6,8,6,6)
+Statistics = c(4,5,4,8,8,9,6,7,9,10)
+
+grades = data.frame(Alg = Algebra, An = Analysis, Stat = Statistics)
+str(grades)
+head(grades)
+
+```
+
+```{r}
+Gender = c("H","M","M","H","H","M","M","H")
+Age = c(20,19,57,10,53,40,20,13)
+No_brother = c(1,4,2,5,3,1,5,1)
+
+data = data.frame(Gender = Gender, Age = Age, No_brothers = No_brother )
+row.names(data) = c("P1","P2","P3","P4","P5","P6","P7","P8")
+
+dimnames(data) = list(
+  c("Antonio","Andrea","Ricardo","Helen","Santiago","Rosa","Pedro","Irma"),
+  c("Sexo","Anios","MiembrosFamilia"))
+
+data = rbind(data, c("H",30,1)) 
+  
+str(data)
+data
+
+Calculus = c(5,4,6,2,1,0,7,8,9,6)
+grades2 = cbind(grades,Calculus)
+head(grades2)
+
+
+```
+
+```{r}
+Gender = c("H","M","M","H","H","M","M","H")
+Age = c(20,19,57,10,53,40,20,13)
+No_brother = c(1,4,2,5,3,1,5,1)
+
+data = data.frame(Gender = Gender, Age = Age, No_brothers = No_brother )
+
+data[data$Gender == "M",] -> df_m
+df_m = droplevels(df_m)
+str(df_m)
+
+```
+
+# Tidyverse
+```{r}
+library(tidyverse)
+iris_petal = select(iris, starts_with("Petal"))
+head(iris_petal)
+```
+
+# Subset
+```{r}
+subset(iris, Species == "setosa", select = c(1,3)) -> setosa
+head(setosa,5)
+str(setosa)
+```
+

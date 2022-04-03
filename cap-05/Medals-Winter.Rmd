@@ -1,0 +1,69 @@
+---
+title: "Winter Olympics Medals"
+author: "Santiago Pérez Moncada"
+date: "25/5/2020"
+output: html_document
+---
+
+# Carga de los Datos
+```{r}
+data = read.csv("../data/medals.csv", header = TRUE, stringsAsFactors = TRUE)
+head(data)
+str(data)
+```
+
+# Numero de deportista
+
+Cada fila en el conjunto de datos es el registro de un deportista
+```{r}
+no_deportista = nrow(data)
+cat("Numero de deportistas: ",no_deportista)
+```
+
+# ¿Cuantos han ganado medallas de oro, cuantos de plata y cuantos de bronce?
+```{r}
+medals  = data[,8]
+medals_gold = length(medals[medals == "Gold"])
+medals_silver = length(medals[medals == "Silver"])
+medals_bronze = length(medals[medals == "Bronze"])
+
+cat(" Ganadores oro: ", medals_gold)
+cat(" Ganadores plata: ", medals_silver)
+cat(" Ganadores bronce: ", medals_bronze)
+```
+
+# ¿En cuantos lugares se han hecho olimpiadas de invierno?
+```{r}
+
+length(levels(data$City))
+
+```
+# ¿Cuantos hombres y cuantas mujeres hay?
+```{r}
+mujeres = length(data$Event.gender[data$Event.gender == "W"])
+hombres = length(data$Event.gender[data$Event.gender == "M"])
+
+cat(" Mujeres participante",mujeres)
+cat(" Hombres participantes",hombres)
+```
+
+# ¿En qué año participaron más deportistas?
+
+```{r}
+data$Year = as.factor(data$Year)
+f <- function(x){
+  length(data$Year[data$Year == x])
+}
+
+participantes = sapply(levels(data$Year), f)
+
+participantes_anios = data.frame(Anio = as.character(levels(data$Year)),
+                                 Paticipantes = participantes )
+participantes_anios
+
+participantes_anios$Anio[
+  which(participantes_anios$Paticipantes ==   max(participantes_anios$Paticipantes))
+  ]
+
+```
+

@@ -1,0 +1,169 @@
+---
+title: "Datos ordinales"
+author: "Santiago Pérez Moncada"
+date: "17/6/2020"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Los **Datos Ordinales** son parecidos a los datos cualitativos, en el sentido de que son cualidades de los individuos u objetos.
+
+La diferencia existe entre los datos cualitativos y los ordinales reside en las características que expresan.En el caso de los ordinales, éstas tienen un orden natural que permite "acumular" observaciones.
+
+## Frecuencias para datos ordinales.
+
+### Frecuencia acumuladas
+
+Al trabajar con datos ordinales, el orden de los niveles de los datos nos permite calcular no solo frecuencias absolutas y relativas, sino también **frecuencias acumuladas.**
+
+Es decir, podmeos contar cuantas veces hemos observado un dato menor o igual a este.
+
+## Ejemplo 1
+
+Suponer que tenemos una muestra de 15 estudiantes de los cuales sabemos su nota en el examen de Estadística. Clasificamos todos estos resultados en Suspenso($S$), Aprobado($A$),
+Notable($N$) y Exelente($E_{x}$) y consideramos su orden natural $S<A<N<E_{x}$.
+
+Las notas obtenidas han sido las siguientes.
+
+$$S, A, N, E_{x}, S, S, E_{x}, E_{X}, N, A, A, A, A, N, S$$
+
+Como recordaras, para saber cuantas hay de cada nivel(frecuencia absoluta), utilizamos la función `table()`. Para crear un factor ordenado debemos usar la funcion `ordered()`.
+
+### Frecuencias Absolutas $f_{i}$
+
+```{r}
+notas = ordered(c("S","A","N","Ex","S","S","Ex","Ex","N","A","A","A","A"
+                  ,"N","S"), levels = c("S","A","N","Ex"))
+
+table(notas)
+```
+
+### Frecuencias absolutas acumuladas.
+
+$$N_{i} = n_{1}+n_{2}+...+n_{i}$$
+
+En lo referente a **Frecuencias absolutas acumuladas**, hay
+
+* 4 estudiantes con $S$ o menos.Ello implica que la frecuencia acumulada de $S$ es 4.
+* 9 estudiantes que han obtenido $A$ o menos. Entonces, la frecuencia acumulada de $A$ es    9.
+* 12 estudiantes de los cuales han obtenido $N$ o menos. Asi la frecuencia acumulada de $N$   es 12.
+* 15 estudiantes (todos) que han obtenido $E_{x}$ o menos. De este modo, la frecuencia acumulada de $E_{x}$ es 15, o sea, el total.
+
+Sea.
+
+$$n_{1} = f_{i}(S),\hspace{1em} n_{2} = f_{i}(A),\hspace{1em} n_{3} = f_{i}(N),
+\hspace{1em} n_{4} = f_{i}(E_{x})$$
+
+| Nivel | $f_{i}$ | $N_{i}$ |
+|-------|---------|---------|
+|  $S$  |    4    |     4   |
+|  $A$  |    5    |     9   |
+|  $N$  |    3    |     12  |
+|$E_{x}$|    3    |     15  |
+
+### Frecuencia relativa acumulada $F_{i}$
+
+$$F_{i} = \frac{N_{i}}{N}$$
+Es dividir la frecuencia Absoluta acumulada de cada nivel entre el total de la población.
+Asi, las frecuencias relativas acumuladas respectivas son-
+
+| Nivel | $f_{i}$ | $N_{i}$ |    $F_{i}$   |
+|-------|---------|---------|--------------|
+|  $S$  |    4    |     4   |$\frac{4}{15}$|
+|  $A$  |    5    |     9   |$\frac{9}{15}$|
+|  $N$  |    3    |     12  |$\frac{12}{15}$|
+|$E_{x}$|    3    |     15  |$\frac{15}{15}$|
+
+En general, suspongamos que realizamos $n$ observaciones
+$$x_{1},...,x_{n}$$
+de un cierto tipo de datos ordinales, cuyos posibles niveles ordenados son
+$$l_{1}<l_{2}<...<l_{k}$$
+por tanto, cada una de las observaciones $x_{j}$ es igual a algún $l_{i}$. Diremos que todas estas observaciones forman una **variable ordinal**.En nuestro ejemplo anterior,los 4 niveles eran.
+
+$$S<A<N<E_{x}$$
+
+Además, nuestro $n = 15$ y nuestros $x_{1},...,x_{15}$ son las calificaciones obteneidas por los alumnos.
+
+De este modo, con notaciones
+
+* Las definiciones de frecunecias absolutas $n_{j}$ y las relativas $f_{j}$, para cada       nivel $l_{j}$ son las mismas que en una variable cualitativa.
+
+* La frecuencia  absoluta acumulada del nivel $l_{j}$ en esta variable ordinal es el número   $N_{j}$ de observaciones $x_{i}$ tales que $x_{j} \leqslant l_{j}$ Es decir,
+
+$$ N_{j} = \sum_{i=1}^{j}n_{i}$$
+
+* La frecuencia relativa acumulada del nivel $l_{j}$ en esta variable ordinal es la          fracción en tanto por 1 $F_{j}$ de observaciones $x_{i} \leqslant l_{j}$. Es decir.
+
+$$F_{j} = \frac{N_{j}}{n} = \sum_{i=1}^{j}\frac{f_{i}}{n}$$
+
+## Ejemplo 2
+
+En un estudio, a un grupo de clientes de un restaurante se les hizo la siguiente pregunta:
+*"¿Estás contento con el trato ofrecido por los trabajadores del establecimiento?"* Las posibles respuestas forman una escala ordinal con $1<2<3<4<5$.
+
+Supngamos que recogieron las siguientes respuestas de 50 técnicos:
+
+```{r}
+set.seed(2018)
+clientes = sample(1:5, 50, replace = TRUE)
+clientes
+set.seed(NULL)
+```
+
+En este caso tenemos 5 niveles ($k=5$) y 50 observaciones ($n=50$) que forman una variable ordinal a la que hemos de llamar clientes.
+
+```{r}
+clientes = ordered(clientes)
+Absoluta = table(clientes)
+Relativa = prop.table(table(clientes))
+Acumulada.Rel = cumsum(Relativa)
+Acumulada.Abs = cumsum(Absoluta)
+
+Absoluta
+Relativa
+Acumulada.Rel
+Acumulada.Abs
+
+barplot(cumsum(Acumulada.Rel), main = "Diagrama de barras fecuencias relativas acumuladas")
+```
+
+
+## Ejemplo 3
+
+Se ha evaluado el tamaño de los cuellos de 100 jirafas. Los niveles que se han utilizado se los considera ordenados de la siguiente manera:
+
+$$Muy \; corto < Corto < Normal < Largo < Muy \; largo$$
+Los valores obtenidos en dicho estudio han sido los siguientes:
+
+
+```{r}
+longitud = ordered(sample(c("Muy corto","Corto","Normal","Largo","Muy largo"),
+                          size = 100, replace = TRUE))
+
+Fr.Abs = table(longitud)
+Fr.Abs
+
+Fr.Rel = prop.table(Fr.Abs)
+Fr.Rel
+
+Fr.Acum= cumsum(Fr.Abs)
+Fr.Acum
+
+Fr.RAcum = cumsum(Fr.Rel)
+Fr.RAcum
+
+barplot(Fr.Abs, main = "Diagrama de Frecuencias Absolutas")
+barplot(Fr.Acum, main = "Diagrama de Frecuencias Absolutas acumuladas")
+barplot(Fr.Rel, main = "Diagrama de Frecuencias Relativas")
+barplot(Fr.RAcum, main = "Diagrama de Frecuencias Relativas acumuladas")
+```
+
+
+
+
+
+
+

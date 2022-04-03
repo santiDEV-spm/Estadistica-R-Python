@@ -1,0 +1,76 @@
+---
+title: "Agrupando datos con `R`"
+author: "Santiago Pérez Moncada"
+date: "4/7/2020"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Al agrupar los datos, lo que hacenmos es convertir nuestra variable cuantitativa en un factor cuyos niveles son las clases en que ha sido dividida e identificamos cada dato con su clase.
+
+
+A la hora de etiquetar los niveles, podemos elegir 3 codificaciones:
+
+*   Los intervalos
+
+*   Las marcas de clase(el punto medio de cada intervalo)
+
+*   El número de orden de cada intervalo
+
+
+## La Función `cut()`
+
+Esta función es la básica en `R` para agrupar un vector de datos numéricos y codificar sus valores con clases a las que pertenecen.
+
+Su sintaxis básica es
+
+`cut(x, breaks=..., labels=..., right=...)`
+
+*   **x** es el vector numérico, nuestra variable cuantitativa
+
+*   **breaks** puede ser un vector numérico formado por los extremos de los intervalos en los que queremos agrupar nuestros datos y que habremos calculado previamente. También puede ser un número $k$ en cuyo caso R agrupa los datos en $k$ clases.Para este caso, R divide el intervalo comprendido entro los valores mínimo y máximo de $x$ en $k$ intervalos y a continuación, dezplaza ligeramente el extremo inferior del primer intervalo a la izquierda y ek extremo del último a la derecha.
+
+*   **labels** es un vector con las etiquetas de los intervalos.Su valor por defecto es utilizar la etiqueta de los mismos intervalos.Si especificamos `labels = FALSE`, obtenemos los intervalos etiquetados por medio de los números naturales correlativos, empezando por 1.Para utilizar como etiqueta las marcas de clase o cualquier otra codificación, hay que entrarlo como valor de este parámetro.
+
+*   **right** es un parámetro que igualado a `FALSE` hace que los intervalos que consideremos sean cerrados por la izquierda y abiertos por la derecha.Este no es su valor por defecto.
+
+*   **include.lowest** igualado a `TRUE` combinado con `right = FALSE` hace que el último intervalo sea cerrado.Puede sernos útil en algunos casos.
+
+En cualquier caso, el resultado de la función `cut` es una lista con los elementos del vector original codificados con las etiquetas de  las clases a las que pertenecen.Bien puede ser un factor o un vector.
+
+$$\;$$
+$$\;$$
+
+## Ejemplo
+
+```{r}
+iris_df = iris
+petals = iris$Petal.Lengt
+head(petals)
+
+
+iris_df$div1 = cut(petals, breaks = 5, right = FALSE)
+
+head(cut(petals, breaks = ceiling(sqrt(length(petals))), right = FALSE))
+
+iris_df$div2 = cut(petals, breaks = c(1,2,3,4,5,6,7), right = FALSE)
+
+head(cut(petals, breaks = 5, right = FALSE, labels = FALSE))
+
+iris_df$div3 = cut(petals, breaks = 5, right = FALSE,
+                labels = c("Peq","Norm","Grand", "XGran","Gigan"))
+
+head(iris_df)
+```
+
+
+
+
+
+
+
+
+
